@@ -1,6 +1,8 @@
 package com.edu.msauthentication.auth.controllers;
 
 import com.edu.msauthentication.auth.services.AuthorizationService;
+import com.edu.msauthentication.user.dtos.AuthenticationDTO;
+import com.edu.msauthentication.user.dtos.RegisterDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

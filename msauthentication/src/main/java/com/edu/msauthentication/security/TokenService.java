@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import com.edu.msauthentication.user.models.UserModel;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -19,8 +20,9 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("auth")
-                    .withSubject(userModel.getName()
-                            .withExpiresAt(getExpirationDate()).sign(algorithm));
+                    .withSubject(userModel.getName())
+                            .withExpiresAt(getExpirationDate())
+                    .sign(algorithm);
             return token;
         } catch (JWTCreationException exception){
             throw new RuntimeException("Erro enquanto gera o token", exception);

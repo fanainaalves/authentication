@@ -1,6 +1,11 @@
 package com.edu.msauthentication.auth.services;
 
 import com.edu.msauthentication.security.TokenService;
+import com.edu.msauthentication.user.dtos.AuthenticationDTO;
+import com.edu.msauthentication.user.dtos.LoginResponseDTO;
+import com.edu.msauthentication.user.dtos.RegisterDTO;
+import com.edu.msauthentication.user.models.UserModel;
+import com.edu.msauthentication.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +48,7 @@ public class AuthorizationService implements UserDetailsService {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    public ResponseEntity<Object> register (@RequestBody registerDTO registerDTO){
+    public ResponseEntity<Object> register (@RequestBody RegisterDTO registerDTO){
         if (this.userRepository.findByName(registerDTO.name()) != null) {
             return ResponseEntity.badRequest().build();
         }
