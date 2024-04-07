@@ -37,7 +37,7 @@ public class AuthorizationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return userRepository.findByName((username));
     }
 
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDTO data){
