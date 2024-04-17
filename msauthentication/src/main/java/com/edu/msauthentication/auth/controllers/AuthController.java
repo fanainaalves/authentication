@@ -6,25 +6,31 @@ import com.edu.msauthentication.user.dtos.RegisterDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth")
 public class AuthController {
 
-    @Autowired
-    AuthorizationService authorizationService;
+    private final AuthorizationService authorizationService;
 
-    @PostMapping("/api/vi/authentication/token/")
+    @Autowired
+    public AuthController(AuthorizationService authorizationService){
+        this.authorizationService = authorizationService;
+    }
+
+    @PostMapping("/api/v1/authorization/token/")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
         return  authorizationService.login(authenticationDTO);
     }
 
-    @PostMapping("/api/vi/authentication/validation/")
-    public ResponseEntity<Object> register(@RequestBody RegisterDTO registerDTO){
-        return authorizationService.register(registerDTO);
+    @PostMapping("/api/v1/authorization/validation/")
+    public ResponseEntity<Object> validateToken(@RequestBody RegisterDTO registerDTO){
+        String token = registerDTO.getToken();
+        if (registerDTO.isValidToken(token)){
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body("Token inválido!");
+        }
     }
 }

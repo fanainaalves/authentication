@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 import java.util.List;
 
@@ -29,25 +29,21 @@ public class UserModel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String name;
+    private String username;
     private String password;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = true)
-    private Date updatedAt;
-
-    public UserModel(String name, String password, UserRole userRole){
-        this.name = name;
+    public UserModel(String username, String password, UserRole userRole){
+        this.username = username;
         this.password = password;
         this.userRole = userRole;
     }
+
+    public UserModel(String username, String encryptedPassword, String role) {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.userRole == userRole.ADMIN) {
@@ -64,7 +60,7 @@ public class UserModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override
@@ -85,5 +81,8 @@ public class UserModel implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setCreatedAt(Date date) {
     }
 }
