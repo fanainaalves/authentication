@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.edu</groupId>
-	<artifactId>msauthentication</artifactId>
+	<artifactId>authentication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>msauthentication</name>
 	<description>Ms Authentication project for Spring Boot</description>
