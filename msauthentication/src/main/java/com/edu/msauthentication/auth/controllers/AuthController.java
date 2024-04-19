@@ -22,18 +22,17 @@ public class AuthController {
         this.authorizationService = authorizationService;
     }
 
-    @PostMapping("/api/v1/authorization/register/")
+    @PostMapping("/api/v1/authorization/register")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid RegisterDTO registerDTO){
         return authorizationService.registerUser(registerDTO);
     }
 
-
-    @PostMapping("/api/v1/authorization/token/")
+    @PostMapping("/api/v1/authorization/token")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
         return  authorizationService.login(authenticationDTO);
     }
 
-    @PostMapping("/api/v1/authorization/validation/")
+    @PostMapping("/api/v1/authorization/validation")
     public ResponseEntity<Object> validateToken(@RequestBody TokenDTO tokenDTO){
         if (tokenDTO.isValidToken(tokenDTO.token())){
             System.out.println("Token Válido");

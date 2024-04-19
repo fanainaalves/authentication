@@ -25,13 +25,26 @@ public class SecurityConfigs {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/vi/authentication/token/").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/vi/authentication/validation/").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+        httpSecurity
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/register").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/validation").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
+//        return httpSecurity.csrf(csrf -> csrf.disable())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/vi/authentication/token/").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/vi/authentication/validation/").hasRole("ADMIN")
+//                        .anyRequest().permitAll()
+//                )
+//                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean

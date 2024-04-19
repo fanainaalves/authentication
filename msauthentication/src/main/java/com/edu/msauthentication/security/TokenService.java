@@ -3,15 +3,19 @@ package com.edu.msauthentication.security;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 import com.edu.msauthentication.auth.exception.TokenValidationException;
 import com.edu.msauthentication.user.models.UserModel;
+
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 
 @Service
 public class TokenService {
@@ -34,9 +38,18 @@ public class TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            JWT.require(algorithm).withIssuer("auth").build().verify(token);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth").build();
+            DecodedJWT jwt = verifier.verify(token);
+
+            // Verifica se o token está expirado
+            if (jwt.getExpiresAt().before(new Date())) {
+                throw new TokenValidationException("Token expirado");
+            }
+
         } catch (JWTVerificationException exception) {
             throw new TokenValidationException("Token inválido", exception);
+        } catch (TokenValidationException exception) {
+            throw exception; // Lança a exceção para ser tratada posteriormente
         }
         return token;
     }
