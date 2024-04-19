@@ -17,7 +17,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 public class TokenService {
     private String secret = "segredo";
 
-    //esse método vai criar um token JWT com o nome do usuario
     public String generateToken(UserModel userModel) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -32,7 +31,6 @@ public class TokenService {
         }
     }
 
-    //verifica se o token é valido
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

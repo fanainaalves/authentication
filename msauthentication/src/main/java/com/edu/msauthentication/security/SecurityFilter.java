@@ -2,8 +2,6 @@ package com.edu.msauthentication.security;
 
 import java.io.IOException;
 
-import com.edu.msauthentication.security.TokenService;
-
 import com.edu.msauthentication.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,9 +31,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         UserDetails user = userRepository.findByUsername(username);
 
         if (user != null) {
-            var authtentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication
-                    (authtentication);
+                    (authentication);
         }
     }
     filterChain.doFilter(request, response);

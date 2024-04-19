@@ -11,5 +11,13 @@ public enum UserRole {
         this.role = role;
     }
 
+    public static UserRole fromString(String roleString){
+        for (UserRole role : UserRole.values()){
+            if (role.role.equalsIgnoreCase(roleString)){
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Role do usuário não encontrado para o valor: " + roleString);
+    }
 
 }

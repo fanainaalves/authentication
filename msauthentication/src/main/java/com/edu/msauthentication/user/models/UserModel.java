@@ -41,9 +41,6 @@ public class UserModel implements UserDetails {
         this.userRole = userRole;
     }
 
-    public UserModel(String username, String encryptedPassword, String role) {
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.userRole == userRole.ADMIN) {
