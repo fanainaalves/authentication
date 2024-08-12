@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("auth/api/v1/authorization")
 public class AuthController {
 
     private final AuthorizationService authorizationService;
@@ -22,17 +22,17 @@ public class AuthController {
         this.authorizationService = authorizationService;
     }
 
-    @PostMapping("/api/v1/authorization/register")
+    @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid RegisterDTO registerDTO){
         return authorizationService.registerUser(registerDTO);
     }
 
-    @PostMapping("/api/v1/authorization/token")
+    @PostMapping("/token")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
         return  authorizationService.login(authenticationDTO);
     }
 
-    @PostMapping("/api/v1/authorization/validation")
+    @PostMapping("/validation")
     public ResponseEntity<Object> validateToken(@RequestBody TokenDTO tokenDTO){
         if (tokenDTO.isValidToken(tokenDTO.token())){
             System.out.println("Token Válido");
