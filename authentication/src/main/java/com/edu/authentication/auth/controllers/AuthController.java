@@ -1,7 +1,9 @@
 package com.edu.authentication.auth.controllers;
 
+import com.edu.authentication.auth.exception.TokenValidationException;
 import com.edu.authentication.auth.services.AuthorizationService;
 import com.edu.authentication.auth.error.ErrorResponse;
+import com.edu.authentication.security.TokenService;
 import com.edu.authentication.user.dtos.AuthenticationDTO;
 import com.edu.authentication.user.dtos.RegisterDTO;
 import com.edu.authentication.user.dtos.TokenDTO;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthorizationService authorizationService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     public AuthController(AuthorizationService authorizationService){
@@ -33,13 +38,12 @@ public class AuthController {
     }
 
     @PostMapping("/validation")
-    public ResponseEntity<Object> validateToken(@RequestBody TokenDTO tokenDTO){
-        if (tokenDTO.isValidToken(tokenDTO.token())){
-            System.out.println("Token Válido");
+    public ResponseEntity<Object> validateToken(@RequestBody @Valid TokenDTO tokenDTO){
+        try{
+            tokenService.validateToken(tokenDTO.token());
             return ResponseEntity.ok().build();
-        } else {
-            System.out.println("Token inválido");
-            return ResponseEntity.badRequest().body(new ErrorResponse("Token inválido!"));
+        }catch (TokenValidationException e){
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 }

@@ -30,23 +30,16 @@ public class SecurityConfigs {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/register").permitAll()
-                        //.requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/validation").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/validation").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
-//        return httpSecurity.csrf(csrf -> csrf.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/vi/authentication/token/").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/api/vi/authentication/validation/").hasRole("ADMIN")
-//                        .anyRequest().permitAll()
-//                )
-//                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

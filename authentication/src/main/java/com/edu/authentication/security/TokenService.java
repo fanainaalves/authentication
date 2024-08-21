@@ -41,7 +41,6 @@ public class TokenService {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth").build();
             DecodedJWT jwt = verifier.verify(token);
 
-            // Verifica se o token está expirado
             if (jwt.getExpiresAt().before(new Date())) {
                 throw new TokenValidationException("Token expirado");
             }
@@ -49,7 +48,7 @@ public class TokenService {
         } catch (JWTVerificationException exception) {
             throw new TokenValidationException("Token inválido", exception);
         } catch (TokenValidationException exception) {
-            throw exception; // Lança a exceção para ser tratada posteriormente
+            throw exception;
         }
         return token;
     }

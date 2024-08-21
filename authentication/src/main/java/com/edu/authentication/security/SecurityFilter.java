@@ -35,16 +35,23 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String secret = "segredo";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        if (!requestURI.equals("/auth/api/v1/authorization/token") && !requestURI.equals("/auth/api/v1/authorization/register")) {
+        if (!requestURI.equals("/auth/api/v1/authorization/token") &&
+                !requestURI.equals("/auth/api/v1/authorization/register") &&
+                !requestURI.equals("/auth/api/v1/authorization/validation")
+        ) {
             var token = this.recoveryToken(request);
             if (token != null){
                 String username = getUsernameFromToken(token);
                 if (username != null) {
                     UserDetails user = userRepository.findByUsername(username);
                     if (user != null) {
-                        var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                        var authentication = new UsernamePasswordAuthenticationToken(
+                                user, null, user.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -67,7 +74,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth").build();
             DecodedJWT jwt = verifier.verify(token);
-            return jwt.getSubject(); // Extrai o nome de usuário do payload do token
+            return jwt.getSubject();
         } catch (JWTVerificationException exception) {
             return null;
         }
