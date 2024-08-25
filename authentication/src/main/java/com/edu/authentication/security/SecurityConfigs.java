@@ -28,9 +28,9 @@ public class SecurityConfigs {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/validation").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/api/v1/authorization/validation").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

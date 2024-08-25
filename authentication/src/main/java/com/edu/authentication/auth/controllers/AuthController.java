@@ -9,8 +9,11 @@ import com.edu.authentication.user.dtos.RegisterDTO;
 import com.edu.authentication.user.dtos.TokenDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,5 +48,15 @@ public class AuthController {
         }catch (TokenValidationException e){
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<Object> getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            return ResponseEntity.ok(userDetails);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
     }
 }
